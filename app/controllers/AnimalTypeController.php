@@ -29,7 +29,10 @@ class AnimalTypeController extends \BaseController {
 	 */
 	public function store()
 	{
-		return Input::get();
+		DB::table('animal_types')->insert(
+		    array('name' => Input::get('name'), 'description' => Input::get('description'))
+		);
+		return 'Successfully added record.';
 	}
 
 	/**
