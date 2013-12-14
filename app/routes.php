@@ -13,5 +13,28 @@
 
 Route::get('/', function()
 {
-	return View::make('hello');
+	return 'Welcome to the API';
+});
+
+//Zoo methods
+Route::resource('zoo', 'ZooController');
+Route::get('/zoo/{id}/animals', function($id)
+{
+	return DB::table('zoos')
+        ->leftJoin('animals', 'animals.zoo_id', '=', 'zoos.id')
+        ->where('animals.zoo_id', $id)
+        ->get();
+});
+
+//Animal methods
+Route::resource('animal', 'AnimalController');
+
+//AnimalType methods
+Route::resource('animal_type', 'AnimalTypeController');
+Route::get('/animal_type/{id}/animals', function($id)
+{
+	return DB::table('animal_types')
+        ->leftJoin('animals', 'animal_types.id', '=', 'animals.animal_type_id')
+        ->where('animal_types.id', $id)
+        ->get();
 });
