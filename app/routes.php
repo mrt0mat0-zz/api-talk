@@ -13,15 +13,16 @@
 
 Route::get('/', function()
 {
-	return 'Welcome to the API';
+	return 'Welcome to the API - Credentials are testuser:password';
 });
 
-//Zoo methods
-Route::resource('zoo', 'ZooController');
-Route::get('/zoo/{id}/animals', function($id)
-{
-	return DB::table('zoos')
-        ->leftJoin('animals', 'animals.zoo_id', '=', 'zoos.id')
+Route::group(array('before' => 'auth.basic'), function(){
+	//Zoo methods
+	Route::resource('zoo', 'ZooController');
+	Route::get('/zoo/{id}/animals', function($id)
+	{
+		return DB::table('zoos')
+        	->leftJoin('animals', 'animals.zoo_id', '=', 'zoos.id')
         ->where('animals.zoo_id', $id)
         ->get();
 });
@@ -37,4 +38,5 @@ Route::get('/animal_type/{id}/animals', function($id)
         ->leftJoin('animals', 'animal_types.id', '=', 'animals.animal_type_id')
         ->where('animal_types.id', $id)
         ->get();
+});
 });
